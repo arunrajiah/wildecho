@@ -1,56 +1,91 @@
-# Welcome to your Expo app 👋
+# WildEcho
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**Mobile companion app for [wildecho-api](https://github.com/arunrajiah/wildecho-api)** -
+record a short clip, get back ranked species candidates from Google's open
+Perch 2.0 model.
 
-## Get started
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Expo SDK 57](https://img.shields.io/badge/Expo-SDK%2057-000020.svg)](https://expo.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6.svg)](tsconfig.json)
 
-1. Install dependencies
+## Status: early bootstrap
 
-   ```bash
-   npm install
-   ```
+This repo currently has project scaffolding and tooling only - **no
+recording, no identification flow, and no backend integration yet.** It talks
+to nothing. If you're looking for the actual ML inference and API, that lives
+in [wildecho-api](https://github.com/arunrajiah/wildecho-api); this repo is
+just the client that will eventually call it.
 
-2. Start the app
+## Stack
 
-   ```bash
-   npx expo start
-   ```
+- [Expo](https://expo.dev) SDK 57 (managed workflow)
+- [Expo Router](https://docs.expo.dev/router/introduction/) - file-based routing, typed routes
+- TypeScript, strict mode
+- [NativeWind](https://www.nativewind.dev) - Tailwind CSS for React Native
+- [TanStack Query](https://tanstack.com/query) - server state
+- [Zustand](https://zustand.docs.pmnd.rs) - client state
+- `expo-secure-store` - for anything sensitive stored on-device
+- [pnpm](https://pnpm.io) - package manager
 
-In the output, you'll find options to open the app in a
+## Quickstart
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Requires Node.js 20+ and pnpm. For native testing, either Xcode (iOS
+Simulator) or Android Studio (Android emulator); Expo Go works too for a quick
+check on a physical device.
 
 ```bash
-npm run reset-project
+git clone https://github.com/arunrajiah/wildecho.git
+cd wildecho
+pnpm install
+pnpm start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Then press `i` (iOS Simulator), `a` (Android emulator), or `w` (web) in the
+Expo CLI, or scan the QR code with Expo Go.
 
-### Other setup steps
+Other scripts:
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+```bash
+pnpm typecheck   # tsc --noEmit
+pnpm lint        # eslint, via eslint-config-expo
+pnpm ios         # expo start --ios
+pnpm android     # expo start --android
+pnpm web         # expo start --web
+```
 
-## Learn more
+## Project layout
 
-To learn more about developing your project with Expo, look at the following resources:
+```
+src/
+  app/            # Expo Router screens (file-based routing)
+    _layout.tsx   # root layout: providers (TanStack Query, safe area, theme)
+    index.tsx     # placeholder home screen
+  global.css      # Tailwind directives + CSS custom properties, consumed by NativeWind
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## A note on pnpm + Metro
 
-## Join the community
+Metro (React Native's bundler) doesn't fully walk pnpm's symlinked,
+content-addressed `node_modules` layout by default, which breaks resolution
+of some packages' own subpath exports reached through a dependency's private
+`node_modules` (e.g. NativeWind's dependency on `react-native-css-interop`).
+`metro.config.js` sets `unstable_enableSymlinks` and
+`unstable_enablePackageExports` to fix this, and `react-native-css-interop`
+is listed as a direct dependency so pnpm hoists it to the project root where
+Metro's resolver reliably finds it. If you hit a similar "Unable to resolve
+module" error after adding a new dependency, this is usually the cause.
 
-Join our community of developers creating universal apps.
+## Contributing
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, commit conventions
+(Conventional Commits), and the stack conventions to follow. See
+[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community expectations.
+
+## License
+
+MIT, copyright 2026 Arun Rajiah. See [LICENSE](LICENSE).
+
+---
+
+If this is useful to you, [sponsoring](https://github.com/sponsors/arunrajiah)
+helps keep it maintained.
