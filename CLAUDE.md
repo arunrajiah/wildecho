@@ -8,7 +8,10 @@ repo is the client only - no ML inference here.
 
 ## Status
 Early bootstrap. Scaffolding and tooling only; no recording, identify flow, or
-backend integration yet.
+backend integration yet. **Android is the current focus platform** - no
+working iOS Simulator in the primary dev environment (Xcode not fully
+installed, CLT only), so verify on Android (emulator or Expo Go on device) and
+via CI's Android debug-build job, not iOS.
 
 ## Stack
 - Expo SDK 57 (managed workflow), Expo Router (typed routes), TypeScript strict
@@ -20,7 +23,7 @@ backend integration yet.
 - `src/global.css` - Tailwind directives, consumed by NativeWind via metro.config.js
 
 ## Commands
-- `pnpm start` / `pnpm ios` / `pnpm android` / `pnpm web` - run the app
+- `pnpm start` / `pnpm android` / `pnpm ios` / `pnpm web` - run the app
 - `pnpm typecheck` - `tsc --noEmit`
 - `pnpm lint` - eslint via eslint-config-expo
 - No test suite yet

@@ -15,9 +15,10 @@ Expect the structure here to change quickly.
 
 ## Development setup
 
-Requires Node.js 20+, [pnpm](https://pnpm.io), and either Xcode (iOS
-Simulator) or Android Studio (Android emulator) for native testing. Expo Go
-also works for a quick check on a physical device.
+Requires Node.js 20+ and [pnpm](https://pnpm.io). Android is the current focus
+platform - Android Studio (Android emulator) or Expo Go on a physical Android
+device are the easiest ways to test. iOS Simulator also works if you have
+Xcode set up, but isn't part of the current verification loop or CI.
 
 ```bash
 git clone https://github.com/arunrajiah/wildecho.git

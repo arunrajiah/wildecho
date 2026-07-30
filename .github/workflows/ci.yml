@@ -62,3 +62,39 @@ jobs:
       # resolution issue documented in the README).
       - name: Export for web
         run: npx expo export --platform web
+
+  android-build:
+    # Android is the current focus platform (no working iOS Simulator in the
+    # primary dev environment for this project). This is real verification,
+    # not just typecheck: it generates the native project and compiles an
+    # actual debug APK, using the Android SDK + JDK ubuntu-latest ships with.
+    name: Android debug build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.17.1
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate native Android project
+        run: npx expo prebuild --platform android --no-install
+
+      - uses: gradle/actions/setup-gradle@v6
+
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon

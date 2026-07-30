@@ -16,6 +16,12 @@ to nothing. If you're looking for the actual ML inference and API, that lives
 in [wildecho-api](https://github.com/arunrajiah/wildecho-api); this repo is
 just the client that will eventually call it.
 
+**Android is the current focus platform.** The code is ordinary Expo/React
+Native and stays cross-platform (nothing here is Android-specific), but
+day-to-day development and verification target Android first for now. CI
+builds a real Android debug APK on every push; there is no equivalent iOS
+verification yet.
+
 ## Stack
 
 - [Expo](https://expo.dev) SDK 57 (managed workflow)
@@ -29,9 +35,9 @@ just the client that will eventually call it.
 
 ## Quickstart
 
-Requires Node.js 20+ and pnpm. For native testing, either Xcode (iOS
-Simulator) or Android Studio (Android emulator); Expo Go works too for a quick
-check on a physical device.
+Requires Node.js 20+ and pnpm. For native testing, Android Studio (Android
+emulator) or a physical Android device via Expo Go; a physical device is the
+easiest path if you don't already have the emulator set up.
 
 ```bash
 git clone https://github.com/arunrajiah/wildecho.git
@@ -40,16 +46,17 @@ pnpm install
 pnpm start
 ```
 
-Then press `i` (iOS Simulator), `a` (Android emulator), or `w` (web) in the
-Expo CLI, or scan the QR code with Expo Go.
+Then press `a` (Android emulator) in the Expo CLI, or scan the QR code with
+Expo Go on an Android device. iOS Simulator (`i`) and web (`w`) also work if
+you have Xcode set up, but aren't the current verification focus.
 
 Other scripts:
 
 ```bash
 pnpm typecheck   # tsc --noEmit
 pnpm lint        # eslint, via eslint-config-expo
-pnpm ios         # expo start --ios
 pnpm android     # expo start --android
+pnpm ios         # expo start --ios
 pnpm web         # expo start --web
 ```
 

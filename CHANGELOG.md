@@ -17,5 +17,15 @@ and this project adheres to
 * ESLint (flat config, `eslint-config-expo`) and a `typecheck` script.
 * A single placeholder screen; no recording, identification, or backend
   integration yet - that starts in a later phase.
+* CI: an Android debug-build job (real `expo prebuild` + `gradlew assembleDebug`
+  on GitHub's Android SDK/JDK), alongside the existing typecheck/lint/web-export
+  checks.
+
+### Changed
+
+* Android is now the current focus platform for development and verification,
+  since a working iOS Simulator isn't available in the primary dev
+  environment. The app itself remains ordinary cross-platform Expo/React
+  Native - nothing Android-specific has been added to the code.
 
 [Unreleased]: https://github.com/arunrajiah/wildecho/commits/main
