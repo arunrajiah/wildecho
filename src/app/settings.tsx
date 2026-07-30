@@ -5,6 +5,7 @@ import { Pressable, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { getHealth } from "@/lib/api/client";
+import { validateApiBaseUrl } from "@/lib/validate-url";
 import { useSettingsStore } from "@/stores/settings-store";
 
 export default function SettingsScreen() {
@@ -13,7 +14,10 @@ export default function SettingsScreen() {
   const [draft, setDraft] = useState(apiBaseUrl ?? "");
   const [checkedUrl, setCheckedUrl] = useState(apiBaseUrl);
 
-  const canSave = draft.trim().length > 0;
+  // Only surface an error once the user has typed something - an empty field
+  // just disables Save silently, rather than nagging before they've started.
+  const validationError = draft.trim() ? validateApiBaseUrl(draft) : null;
+  const canSave = draft.trim().length > 0 && validationError === null;
 
   const healthQuery = useQuery({
     queryKey: ["health", checkedUrl],
@@ -24,6 +28,11 @@ export default function SettingsScreen() {
   });
 
   const handleSave = async () => {
+    // Belt and suspenders: the button is disabled when invalid, but a
+    // TextInput's onSubmitEditing (return key) can still fire independently.
+    if (!canSave) {
+      return;
+    }
     await setApiBaseUrl(draft);
     setCheckedUrl(draft.trim() || null);
   };
@@ -46,13 +55,22 @@ export default function SettingsScreen() {
         <TextInput
           value={draft}
           onChangeText={setDraft}
+          onSubmitEditing={handleSave}
           placeholder="https://your-instance.example.com"
           placeholderTextColor="#9ca3af"
           autoCapitalize="none"
           autoCorrect={false}
           keyboardType="url"
-          className="rounded-lg border border-neutral-300 px-4 py-3 text-base text-neutral-900 dark:border-neutral-700 dark:text-neutral-50"
+          returnKeyType="done"
+          className={`rounded-lg border px-4 py-3 text-base text-neutral-900 dark:text-neutral-50 ${
+            validationError
+              ? "border-red-500 dark:border-red-500"
+              : "border-neutral-300 dark:border-neutral-700"
+          }`}
         />
+        {validationError ? (
+          <Text className="text-sm text-red-600 dark:text-red-400">{validationError}</Text>
+        ) : null}
 
         <Pressable
           onPress={handleSave}
