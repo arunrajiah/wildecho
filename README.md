@@ -8,13 +8,14 @@ Perch 2.0 model.
 [![Expo SDK 57](https://img.shields.io/badge/Expo-SDK%2057-000020.svg)](https://expo.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6.svg)](tsconfig.json)
 
-## Status: early bootstrap
+## Status
 
-This repo currently has project scaffolding and tooling only - **no
-recording, no identification flow, and no backend integration yet.** It talks
-to nothing. If you're looking for the actual ML inference and API, that lives
-in [wildecho-api](https://github.com/arunrajiah/wildecho-api); this repo is
-just the client that will eventually call it.
+The core loop works: configure a wildecho-api server URL in Settings, record
+a clip, and get back ranked species candidates. There's no recording history,
+no offline queueing, and no polish yet - this is the MVP flow, not a finished
+app. All the actual ML inference and API logic lives in
+[wildecho-api](https://github.com/arunrajiah/wildecho-api); this repo is just
+the client.
 
 **Android is the current focus platform.** The code is ordinary Expo/React
 Native and stays cross-platform (nothing here is Android-specific), but
@@ -64,10 +65,18 @@ pnpm web         # expo start --web
 
 ```
 src/
-  app/            # Expo Router screens (file-based routing)
-    _layout.tsx   # root layout: providers (TanStack Query, safe area, theme)
-    index.tsx     # placeholder home screen
-  global.css      # Tailwind directives + CSS custom properties, consumed by NativeWind
+  app/                    # Expo Router screens (file-based routing)
+    _layout.tsx           # root layout: providers (TanStack Query, safe area, theme)
+    index.tsx             # record a clip, view results
+    settings.tsx          # configure the wildecho-api server URL
+  components/
+    prediction-row.tsx    # one species candidate in the results list
+  lib/api/
+    types.ts              # types mirroring wildecho-api's response schemas
+    client.ts             # fetch client: identify(), getHealth(), typed errors
+  stores/
+    settings-store.ts     # Zustand store for the server URL (persisted via expo-secure-store)
+  global.css              # Tailwind directives + CSS custom properties, consumed by NativeWind
 ```
 
 ## A note on pnpm + Metro
