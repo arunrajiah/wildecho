@@ -44,6 +44,18 @@ a self-hostable species identification service. Relevant considerations:
 - **Audio permissions.** Microphone access is requested only when actually
   needed for recording, and only used for the identify flow - not for
   background or continuous capture.
+- **Cleartext (plain HTTP) traffic is allowed on Android**, via
+  `usesCleartextTraffic: true` (`app.json`, `expo-build-properties`). This is
+  deliberate: wildecho-api's own default self-hosted setup (`docker compose
+  up`) serves plain HTTP, and the primary use case here is a server on your
+  own local network, e.g. `http://192.168.1.5:8000`. Android blocks cleartext
+  traffic app-wide by default for apps targeting API 28+; we investigated
+  scoping the exception to private IP ranges only (Android's network security
+  config supports exact-hostname and domain-suffix matching, but *not* CIDR/IP
+  ranges), concluded that isn't achievable with the standard mechanism, and
+  chose the documented app-wide flag instead of a false sense of scoping.
+  If you deploy wildecho-api behind Fly.io or Render (both force HTTPS), use
+  the `https://` URL and this setting is simply unused for your traffic.
 
 ## Out of scope
 

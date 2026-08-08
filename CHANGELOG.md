@@ -25,6 +25,17 @@ and this project adheres to
 * A Settings screen to configure the wildecho-api server URL, with a live
   `GET /v1/health` check showing whether the model is actually loaded there.
   The URL is stored via `expo-secure-store`.
+* Server URL validation before saving: rejects empty input, missing
+  `http(s)://` scheme, and malformed URLs, with an inline error message.
+
+### Fixed
+
+* Android was silently blocking all `http://` requests (its default
+  cleartext-traffic policy for apps targeting API 28+), even though the
+  Settings screen accepts `http://` URLs for the common local-network
+  self-hosting case. Fixed via `expo-build-properties`'
+  `android.usesCleartextTraffic`. See SECURITY.md for why this is an
+  app-wide flag rather than scoped to private IP ranges.
 
 ### Changed
 
