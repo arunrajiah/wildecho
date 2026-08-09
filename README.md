@@ -69,14 +69,19 @@ src/
     _layout.tsx           # root layout: providers (TanStack Query, safe area, theme)
     index.tsx             # record a clip, view results
     settings.tsx          # configure the wildecho-api server URL
+    about.tsx             # model info, taxa coverage, and the accuracy disclaimer
   components/
     prediction-row.tsx    # one species candidate in the results list
   lib/api/
     types.ts              # types mirroring wildecho-api's response schemas
-    client.ts             # fetch client: identify(), getHealth(), typed errors
+    client.ts             # fetch client: identify(), getHealth(), getAbout(), typed errors
   stores/
     settings-store.ts     # Zustand store for the server URL (persisted via expo-secure-store)
   global.css              # Tailwind directives + CSS custom properties, consumed by NativeWind
+
+eas.json                  # EAS Build profiles (development/preview/production)
+PRIVACY.md                # Privacy policy (required for Play Console submission)
+docs/play-store-listing.md  # Draft store listing copy, for review before submitting
 ```
 
 ## A note on pnpm + Metro

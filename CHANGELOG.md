@@ -27,8 +27,38 @@ and this project adheres to
   The URL is stored via `expo-secure-store`.
 * Server URL validation before saving: rejects empty input, missing
   `http(s)://` scheme, and malformed URLs, with an inline error message.
+* An About screen: fetches `GET /v1/about` live and shows its accuracy
+  disclaimer (bird bias, no bat coverage), taxa coverage counts, and model
+  attribution. The results screen also shows a shorter warning whenever the
+  top prediction isn't a bird, since that's specifically when Perch's
+  bird-heavy training shows up as reduced reliability.
+* Real app icon, adaptive icon layers, and splash image, replacing Expo's
+  default template assets.
+* `eas.json` build profiles (development/preview/production) and an EAS
+  project, for producing signed Android builds via `eas build`.
+* `PRIVACY.md` and a draft Play Store listing (`docs/play-store-listing.md`),
+  ahead of a Play Console submission.
 
 ### Fixed
+
+* EAS cloud builds failed at the Gradle bundling step with `Cannot find module
+  'babel-preset-expo'`, then (after fixing that) `Cannot find module
+  '@babel/plugin-transform-react-jsx'`. Root cause: `babel-preset-expo` was
+  never listed as a direct dependency (only pulled in transitively), and
+  pnpm's default strict `node_modules` isolation means Metro's Babel
+  transform worker - which resolves plugins via plain `require()` from the
+  project root, not from within `babel-preset-expo`'s own package - can't see
+  packages that aren't hoisted there. Fixed by adding `babel-preset-expo` as
+  an explicit devDependency and switching pnpm to `node-linker=hoisted`
+  (`.npmrc`) so `node_modules` behaves like npm/yarn's flat layout Metro
+  expects, instead of chasing each individual missing transitive plugin.
+
+* `expo-audio`'s config plugin defaults to requesting background-playback
+  permissions (`FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MEDIA_PLAYBACK`)
+  that this app doesn't use - recording only ever happens in the foreground.
+  Disabled via the plugin's `enableBackgroundPlayback: false` option, and set
+  a specific microphone permission rationale string instead of the generic
+  default.
 
 * Android was silently blocking all `http://` requests (its default
   cleartext-traffic policy for apps targeting API 28+), even though the

@@ -97,11 +97,18 @@ export default function HomeScreen() {
     <SafeAreaView className="flex-1 bg-white dark:bg-neutral-950">
       <View className="flex-row items-center justify-between px-6 pt-2">
         <Text className="text-xl font-bold text-neutral-900 dark:text-neutral-50">WildEcho</Text>
-        <Link href="/settings" asChild>
-          <Pressable hitSlop={12}>
-            <Text className="text-base text-blue-600 dark:text-blue-400">Settings</Text>
-          </Pressable>
-        </Link>
+        <View className="flex-row gap-4">
+          <Link href="/about" asChild>
+            <Pressable hitSlop={12}>
+              <Text className="text-base text-blue-600 dark:text-blue-400">About</Text>
+            </Pressable>
+          </Link>
+          <Link href="/settings" asChild>
+            <Pressable hitSlop={12}>
+              <Text className="text-base text-blue-600 dark:text-blue-400">Settings</Text>
+            </Pressable>
+          </Link>
+        </View>
       </View>
 
       <View className="flex-1 px-6">
@@ -195,6 +202,7 @@ function ErrorView({ message, onRetry }: { message: string; onRetry: () => void 
 
 function ResultsView({ result, onReset }: { result: IdentifyResponse; onReset: () => void }) {
   const hasPredictions = result.predictions.length > 0;
+  const topGroup = result.predictions[0]?.taxonomic_group;
 
   return (
     <View className="flex-1 gap-3 pt-4">
@@ -209,6 +217,16 @@ function ResultsView({ result, onReset }: { result: IdentifyResponse; onReset: (
         <View className="rounded-lg bg-amber-50 p-4 dark:bg-amber-950">
           <Text className="text-sm text-amber-800 dark:text-amber-200">
             Low confidence overall - treat these as a weak guess, not an identification.
+          </Text>
+        </View>
+      ) : topGroup && topGroup !== "bird" ? (
+        // Perch's training data is heavily bird-weighted; non-bird results are
+        // less reliable even at a confidence level that would be trustworthy
+        // for a bird. See the About screen for the full accuracy disclaimer.
+        <View className="rounded-lg bg-amber-50 p-4 dark:bg-amber-950">
+          <Text className="text-sm text-amber-800 dark:text-amber-200">
+            This model is trained mostly on birds - {topGroup} identifications are less reliable.
+            See About for details.
           </Text>
         </View>
       ) : null}

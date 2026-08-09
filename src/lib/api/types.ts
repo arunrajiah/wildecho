@@ -58,3 +58,32 @@ export interface ApiErrorBody {
   error: string;
   detail: string;
 }
+
+export interface TaxaCoverage {
+  total_classes: number;
+  species_classes: number;
+  general_sound_event_classes: number;
+  birds: number;
+  non_bird_species: number;
+  /** The accuracy/coverage caveat (bird bias, no bat coverage) - show this to users. */
+  disclaimer: string;
+}
+
+export interface Attribution {
+  model_name: string;
+  model_authors: string;
+  model_license: string;
+  citation: string;
+  links: Record<string, string>;
+}
+
+export interface AboutResponse {
+  name: string;
+  version: string;
+  description: string;
+  model_version: string;
+  license: string;
+  coverage: TaxaCoverage;
+  attribution: Attribution;
+  limits: Record<string, number | string>;
+}

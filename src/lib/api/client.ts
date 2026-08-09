@@ -1,4 +1,4 @@
-import type { ApiErrorBody, HealthResponse, IdentifyResponse } from "./types";
+import type { AboutResponse, ApiErrorBody, HealthResponse, IdentifyResponse } from "./types";
 
 /**
  * Thrown for any non-2xx response wildecho-api returns. `code` is the stable
@@ -111,6 +111,16 @@ export async function identify(
 /** Calls `GET /v1/health` - used to confirm a configured server URL actually works. */
 export async function getHealth(baseUrl: string): Promise<HealthResponse> {
   return request<HealthResponse>(`${normalizeBaseUrl(baseUrl)}/v1/health`, {
+    headers: { Accept: "application/json" },
+  });
+}
+
+/**
+ * Calls `GET /v1/about` - model provenance, taxa coverage, and the accuracy
+ * disclaimer the backend explicitly documents for clients to surface to users.
+ */
+export async function getAbout(baseUrl: string): Promise<AboutResponse> {
+  return request<AboutResponse>(`${normalizeBaseUrl(baseUrl)}/v1/about`, {
     headers: { Accept: "application/json" },
   });
 }

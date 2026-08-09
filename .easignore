@@ -1,0 +1,15 @@
+# EAS Build uploads the working directory as-is; without this, a locally
+# generated (and possibly stale, from local `expo prebuild` / `expo run:android`
+# debugging) android/ or ios/ folder would be uploaded and EAS would treat this
+# as a bare-workflow project with pre-existing native code, skipping its own
+# fresh prebuild - producing exactly the kind of confusing cloud build failure
+# this file exists to prevent. Same idea as .gitignore's "generated native
+# folders" entry, just for EAS's own upload step.
+/android
+/ios
+
+# Local dev/build artifacts, never needed in the cloud build archive.
+node_modules
+.expo
+dist
+*.log
