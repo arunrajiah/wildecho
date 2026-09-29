@@ -2,38 +2,38 @@
 
 # wildecho (mobile app)
 
-Mobile companion app for [wildecho-api](https://github.com/arunrajiah/wildecho-api):
-record a clip, send it to that backend, show ranked species candidates. This
-repo is the client only - no ML inference here.
+Mobile client for [wildecho-api](https://github.com/arunrajiah/wildecho-api): record a
+clip, send it to that backend, show ranked species candidates. No ML inference here.
 
 ## Status
-Early bootstrap. Scaffolding and tooling only; no recording, identify flow, or
-backend integration yet. **Android is the current focus platform** - no
-working iOS Simulator in the primary dev environment (Xcode not fully
-installed, CLT only), so verify on Android (emulator or Expo Go on device) and
-via CI's Android debug-build job, not iOS.
+Feature complete v1 (record, identify, settings, about). Android only (package
+`dev.arunrajiah.wildecho`); Play Console listing done, production release is a draft.
+No local emulator works on this Mac; verify via EAS preview APK on a device.
 
 ## Stack
-- Expo SDK 57 (managed workflow), Expo Router (typed routes), TypeScript strict
-- NativeWind (Tailwind for RN), TanStack Query, Zustand, expo-secure-store
-- pnpm
+- Expo SDK 57, Expo Router (typed routes), TypeScript strict
+- NativeWind (brand palette in tailwind.config.js), TanStack Query, Zustand, expo-secure-store, expo-audio
+- pnpm with `.npmrc` `node-linker=hoisted` (required for Metro/Babel; don't remove)
 
 ## Layout
-- `src/app/` - Expo Router screens; `_layout.tsx` holds root providers
-- `src/global.css` - Tailwind directives, consumed by NativeWind via metro.config.js
+- `src/app/` screens (`index` record/results, `settings`, `about`); `_layout.tsx` providers
+- `src/components/` BrandMark, PredictionRow; `src/lib/api/` API client; `src/stores/` Zustand
+- `assets/images/` icon set (source generator lives outside the repo; brand mark = singing bird + echo arcs)
+- `secrets/play-service-account.json` Play API key (gitignored, never commit)
 
 ## Commands
-- `pnpm start` / `pnpm android` / `pnpm ios` / `pnpm web` - run the app
-- `pnpm typecheck` - `tsc --noEmit`
-- `pnpm lint` - eslint via eslint-config-expo
-- No test suite yet
+- `pnpm start` / `pnpm android`; `pnpm typecheck`; `pnpm lint`; no test suite
+- `npx eas-cli build -p android --profile production --auto-submit` builds an AAB, bumps
+  versionCode in app.json (commit it), and uploads to the Play internal track
+- Free EAS plan has a monthly build quota; fallback is `--local` (needs
+  JAVA_HOME=/opt/homebrew/opt/openjdk@17 and ANDROID_HOME)
+- Promote to production via Play Developer API (edits > tracks/production > commit)
 
 ## Conventions
 - Conventional Commits; never add Claude/AI attribution to commits
-- Don't introduce a second library for something the stack already covers
-  (no Redux next to Zustand, no second styling system next to NativeWind)
-- pnpm + Metro symlink gotcha: see README "A note on pnpm + Metro" before
-  chasing a module-resolution error after adding a dependency
+- No em dashes in user-facing strings
+- One library per concern (Zustand, NativeWind); don't add parallels
+- `blockedPermissions` in app.json strips FOREGROUND_SERVICE perms that expo-audio merges in (Play declaration otherwise required)
 
 ## Token efficiency
 - Grep/Glob to the target file; read only the relevant section
