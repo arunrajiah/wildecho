@@ -6,12 +6,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { getHealth } from "@/lib/api/client";
 import { validateApiBaseUrl } from "@/lib/validate-url";
-import { useSettingsStore } from "@/stores/settings-store";
+import { DEFAULT_API_BASE_URL, useSettingsStore } from "@/stores/settings-store";
 
 export default function SettingsScreen() {
   const apiBaseUrl = useSettingsStore((state) => state.apiBaseUrl);
+  const isCustom = useSettingsStore((state) => state.isCustom);
   const setApiBaseUrl = useSettingsStore((state) => state.setApiBaseUrl);
-  const [draft, setDraft] = useState(apiBaseUrl ?? "");
+  const [draft, setDraft] = useState(isCustom ? (apiBaseUrl ?? "") : "");
   const [checkedUrl, setCheckedUrl] = useState(apiBaseUrl);
 
   // Only surface an error once the user has typed something - an empty field
@@ -34,7 +35,13 @@ export default function SettingsScreen() {
       return;
     }
     await setApiBaseUrl(draft);
-    setCheckedUrl(draft.trim() || null);
+    setCheckedUrl(useSettingsStore.getState().apiBaseUrl);
+  };
+
+  const handleUseDefault = async () => {
+    await setApiBaseUrl(null);
+    setDraft("");
+    setCheckedUrl(DEFAULT_API_BASE_URL);
   };
 
   return (
@@ -48,13 +55,14 @@ export default function SettingsScreen() {
           Server
         </Text>
         <Text className="mt-2 text-sm leading-5 text-neutral-500 dark:text-neutral-400">
-          The wildecho-api instance this app should call. See{" "}
-          github.com/arunrajiah/wildecho-api for how to self-host one.
+          {isCustom
+            ? "WildEcho is using your own wildecho-api server."
+            : "WildEcho is using the free public server. Running your own wildecho-api instance? Enter its URL below (see github.com/arunrajiah/wildecho-api)."}
         </Text>
 
         <View className="mt-6 gap-4">
           <Text className="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
-            Server URL
+            {isCustom ? "Your server URL" : "Custom server URL (optional)"}
           </Text>
           <TextInput
             value={draft}
@@ -91,6 +99,12 @@ export default function SettingsScreen() {
               Save
             </Text>
           </Pressable>
+
+          {isCustom ? (
+            <Pressable onPress={handleUseDefault} hitSlop={8} className="items-center py-1">
+              <Text className="text-sm font-medium text-brand-500">Use the public server instead</Text>
+            </Pressable>
+          ) : null}
         </View>
 
         {checkedUrl ? (

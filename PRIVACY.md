@@ -1,25 +1,28 @@
 # WildEcho Privacy Policy
 
-_Last updated: 2026-08-09_
+_Last updated: 2026-09-30_
 
 WildEcho ("the app") is a mobile client for
 [wildecho-api](https://github.com/arunrajiah/wildecho-api), an open-source,
 self-hostable species identification service. This policy describes what the
-app itself does with data. The app has no backend or servers operated by its
-developer.
+app does with data. By default the app uses a public wildecho-api server run
+by its developer on Hugging Face Spaces; you can switch to your own server in
+Settings.
 
 ## What the app collects
 
-**Nothing, by the app itself.** WildEcho has no analytics, no advertising or
-tracking SDKs, and does not send any data to its developer or to any third
-party the app's developer controls.
+**No accounts, analytics, advertising, or tracking.** WildEcho has no
+analytics or advertising SDKs and does not ask who you are. The only data that
+leaves your device is the audio clip you choose to identify, sent to the
+server described below.
 
 ## What the app does with your data
 
-- **Microphone audio.** When you record a clip, it is sent directly from your
-  device to the wildecho-api server URL you configure in Settings, and only to
-  that server. See "Self-hosted servers" below for what that means.
-- **Server URL.** The address you enter in Settings is stored only on your
+- **Microphone audio.** When you record a clip, it is sent over HTTPS to the
+  server in use (the public server by default, or the one you set in
+  Settings), and only to that server. The public server processes each clip
+  in memory to return species matches and does not store it.
+- **Server URL.** If you enter your own server in Settings, the address is stored only on your
   device, using Android's secure, encrypted storage (`expo-secure-store`). It
   is never transmitted anywhere except as the destination of your own
   requests.
@@ -33,19 +36,26 @@ party the app's developer controls.
   clip you are about to identify. The app does not record in the background
   and does not access the microphone at any other time.
 
+## The public server
+
+The default server runs wildecho-api on Hugging Face Spaces. It keeps no copy
+of your audio and has audio storage for feedback turned off. Like any web
+service, the hosting platform (Hugging Face) may keep standard request logs
+such as IP addresses and timestamps; see Hugging Face's privacy policy. The
+server also uses your IP address, briefly and in memory, for rate limiting.
+
 ## Self-hosted servers
 
-WildEcho is a client for wildecho-api, which you (or someone you trust)
-deploys and operates independently. WildEcho's developer does not operate,
-have access to, or receive data from any wildecho-api instance, unless they
-also happen to be the operator of that specific server. If you use a server
+If you switch to another wildecho-api server in Settings, that server is
+deployed and operated independently. WildEcho's developer does not operate,
+have access to, or receive data from such a server. If you use a server
 run by someone else, that operator's own privacy practices govern the data
 you send them - ask them if you're unsure what they do with it.
 
 ## Data retention and deletion
 
-The app itself stores only your configured server URL, locally on your
-device. Uninstalling the app removes it. WildEcho retains nothing else on
+The app itself stores only your custom server URL (if you set one), locally
+on your device. The public server does not retain your audio. Uninstalling the app removes it. WildEcho retains nothing else on
 your behalf. Anything stored server-side (e.g. optional feedback
 corrections) is governed by that server's own retention practices - see
 wildecho-api's own documentation for its defaults if you operate one

@@ -58,7 +58,7 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
     response = await fetch(url, { ...init, signal: controller.signal });
   } catch (cause) {
     if (cause instanceof Error && cause.name === "AbortError") {
-      throw new NetworkError("The server took too long to respond. Check the URL and try again.");
+      throw new NetworkError("The server took too long to respond. If it was idle it may still be starting, so try again in a minute.");
     }
     throw new NetworkError(
       "Could not reach the server. Check the API URL in Settings and your network connection."
@@ -71,6 +71,13 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
   if (!response.ok) {
     if (isApiErrorBody(body)) {
       throw new ApiError(body.error, body.detail, response.status);
+    }
+    if (response.status === 502 || response.status === 503) {
+      throw new ApiError(
+        "server_starting",
+        "The server is waking up after being idle. Give it a minute, then try again.",
+        response.status
+      );
     }
     throw new ApiError(
       "unknown_error",

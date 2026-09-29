@@ -10,29 +10,31 @@ inaccurately.
 
 **App name** (max 30 characters): `WildEcho`
 
-**Short description** (max 80 characters, 78 used):
+**Short description** (max 80 characters, 73 used):
 ```
-Record wildlife sounds, get species candidates from your own hosted server
+Record an animal call and get instant species matches for birds and more
 ```
 
 **Full description** (max 4000 characters):
 
 ```
-WildEcho records a short clip of an animal call and sends it to a
-wildecho-api server - one you or someone you trust runs yourself - which
-returns ranked species candidates using Google's open Perch 2.0 bioacoustics
-model.
+Hear a bird or frog and wonder what it is? Record a few seconds with WildEcho
+and get ranked species matches with confidence scores, powered by Google's
+open Perch 2.0 bioacoustics model covering over 14,000 species.
 
 HOW IT WORKS
-1. Point the app at your wildecho-api server (Settings)
-2. Record a few seconds of an animal call
-3. Get back ranked species candidates with confidence scores
+1. Tap Record and capture a few seconds of the call
+2. WildEcho sends the clip to its identification server
+3. See the best match plus other candidates, each with a confidence score
 
-SELF-HOSTED, NOT A CLOUD SERVICE
-This app has no backend of its own. It's a client for wildecho-api
-(github.com/arunrajiah/wildecho-api), an open-source service you deploy
-yourself - on your own machine, a small VPS, or a platform like Fly.io or
-Render. Your audio goes to the server you configure, nowhere else.
+FREE, PRIVATE, NO ACCOUNT
+No sign-up, no ads, no tracking. Clips go over HTTPS to the free public
+WildEcho server, which uses them only to answer your request and does not
+store them.
+
+RUN YOUR OWN SERVER (OPTIONAL)
+Prefer full control? The backend, wildecho-api, is open source. Deploy it on
+your own machine or cloud and point the app at it in Settings.
 
 ACCURACY AND LIMITATIONS - PLEASE READ
 Perch 2.0's training data is heavily bird-weighted: about 70% of its species
@@ -56,7 +58,7 @@ with or endorsed by Google.
 "identify what you're hearing" framing better).
 
 **Tags/keywords**: bioacoustics, birdwatching, wildlife, species identification,
-self-hosted, open source
+bird sounds, open source
 
 **Contact email**: arunrajiah@gmail.com
 

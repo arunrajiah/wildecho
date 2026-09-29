@@ -102,8 +102,10 @@ export default function AboutScreen() {
                 This app
               </Text>
               <Text className="mb-3 text-sm leading-5 text-neutral-500 dark:text-neutral-400">
-                WildEcho is free, open source, and MIT licensed. It does no ML inference itself -
-                all identification happens on the wildecho-api server you configured.
+                WildEcho is free, open source, and MIT licensed. Identification runs on a
+                wildecho-api server: the public one by default, or your own if you set one in
+                Settings. The public server uses clips only to answer your request and does
+                not store them.
               </Text>
               <Pressable onPress={() => Linking.openURL(WILDECHO_REPO_URL)} hitSlop={4}>
                 <Text className="text-sm font-medium text-brand-500">
