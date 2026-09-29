@@ -20,28 +20,36 @@ export default function AboutScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white dark:bg-neutral-950">
-      <ScrollView className="flex-1 px-6 py-4" contentContainerClassName="pb-8">
-        <Pressable onPress={() => router.back()} hitSlop={12} className="mb-4 self-start">
-          <Text className="text-base text-blue-600 dark:text-blue-400">Back</Text>
+      <ScrollView
+        className="flex-1 px-6 py-4"
+        contentContainerClassName="pb-10"
+        showsVerticalScrollIndicator={false}
+      >
+        <Pressable onPress={() => router.back()} hitSlop={12} className="self-start">
+          <Text className="text-base font-medium text-brand-500">Back</Text>
         </Pressable>
 
-        <Text className="mb-4 text-2xl font-bold text-neutral-900 dark:text-neutral-50">About</Text>
+        <Text className="mt-5 text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">
+          About
+        </Text>
 
         {!apiBaseUrl ? (
-          <Text className="text-base text-neutral-500 dark:text-neutral-400">
+          <Text className="mt-4 text-base text-neutral-500 dark:text-neutral-400">
             Set up a server in Settings to see model details.
           </Text>
         ) : aboutQuery.isLoading ? (
-          <ActivityIndicator />
+          <View className="mt-8">
+            <ActivityIndicator />
+          </View>
         ) : aboutQuery.isError ? (
-          <Text className="text-base text-red-600 dark:text-red-400">
+          <Text className="mt-4 text-base text-red-600 dark:text-red-400">
             Could not load model info:{" "}
             {aboutQuery.error instanceof Error ? aboutQuery.error.message : "unknown error"}
           </Text>
         ) : aboutQuery.data ? (
-          <View className="gap-6">
-            <View className="rounded-lg bg-amber-50 p-4 dark:bg-amber-950">
-              <Text className="mb-1 text-sm font-semibold text-amber-900 dark:text-amber-100">
+          <View className="mt-5 gap-7">
+            <View className="rounded-2xl bg-amber-50 p-5 dark:bg-amber-950">
+              <Text className="mb-1.5 text-sm font-semibold text-amber-900 dark:text-amber-100">
                 Accuracy and limitations
               </Text>
               <Text className="text-sm leading-5 text-amber-800 dark:text-amber-200">
@@ -50,21 +58,27 @@ export default function AboutScreen() {
             </View>
 
             <View>
-              <Text className="mb-1 text-sm font-semibold text-neutral-900 dark:text-neutral-50">
+              <Text className="mb-2 text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
                 Coverage
               </Text>
-              <Text className="text-sm text-neutral-500 dark:text-neutral-400">
-                {aboutQuery.data.coverage.species_classes.toLocaleString()} species -{" "}
-                {aboutQuery.data.coverage.birds.toLocaleString()} birds,{" "}
-                {aboutQuery.data.coverage.non_bird_species.toLocaleString()} other taxa
-              </Text>
+              <View className="flex-row gap-3">
+                <StatCard
+                  value={aboutQuery.data.coverage.species_classes.toLocaleString()}
+                  label="species"
+                />
+                <StatCard value={aboutQuery.data.coverage.birds.toLocaleString()} label="birds" />
+                <StatCard
+                  value={aboutQuery.data.coverage.non_bird_species.toLocaleString()}
+                  label="other taxa"
+                />
+              </View>
             </View>
 
             <View>
-              <Text className="mb-1 text-sm font-semibold text-neutral-900 dark:text-neutral-50">
+              <Text className="mb-2 text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
                 Model
               </Text>
-              <Text className="mb-2 text-sm text-neutral-500 dark:text-neutral-400">
+              <Text className="mb-3 text-sm leading-5 text-neutral-500 dark:text-neutral-400">
                 {aboutQuery.data.attribution.model_name} by {aboutQuery.data.attribution.model_authors}
                 , licensed {aboutQuery.data.attribution.model_license}. Not affiliated with or
                 endorsed by Google.
@@ -73,10 +87,10 @@ export default function AboutScreen() {
                 <Pressable
                   key={label}
                   onPress={() => Linking.openURL(url)}
-                  className="mb-1"
+                  className="mb-1.5"
                   hitSlop={4}
                 >
-                  <Text className="text-sm text-blue-600 dark:text-blue-400">
+                  <Text className="text-sm font-medium text-brand-500">
                     {label.replaceAll("_", " ")}
                   </Text>
                 </Pressable>
@@ -84,15 +98,15 @@ export default function AboutScreen() {
             </View>
 
             <View>
-              <Text className="mb-1 text-sm font-semibold text-neutral-900 dark:text-neutral-50">
+              <Text className="mb-2 text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
                 This app
               </Text>
-              <Text className="mb-2 text-sm text-neutral-500 dark:text-neutral-400">
+              <Text className="mb-3 text-sm leading-5 text-neutral-500 dark:text-neutral-400">
                 WildEcho is free, open source, and MIT licensed. It does no ML inference itself -
                 all identification happens on the wildecho-api server you configured.
               </Text>
               <Pressable onPress={() => Linking.openURL(WILDECHO_REPO_URL)} hitSlop={4}>
-                <Text className="text-sm text-blue-600 dark:text-blue-400">
+                <Text className="text-sm font-medium text-brand-500">
                   github.com/arunrajiah/wildecho
                 </Text>
               </Pressable>
@@ -101,5 +115,16 @@ export default function AboutScreen() {
         ) : null}
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function StatCard({ value, label }: { value: string; label: string }) {
+  return (
+    <View className="flex-1 rounded-2xl bg-neutral-50 px-4 py-4 dark:bg-neutral-900">
+      <Text className="text-xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">
+        {value}
+      </Text>
+      <Text className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">{label}</Text>
+    </View>
   );
 }

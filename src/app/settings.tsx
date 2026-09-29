@@ -39,73 +39,98 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white dark:bg-neutral-950">
-      <View className="flex-1 gap-4 px-6 py-4">
+      <View className="flex-1 px-6 py-4">
         <Pressable onPress={() => router.back()} hitSlop={12} className="self-start">
-          <Text className="text-base text-blue-600 dark:text-blue-400">Back</Text>
+          <Text className="text-base font-medium text-brand-500">Back</Text>
         </Pressable>
 
-        <Text className="text-2xl font-bold text-neutral-900 dark:text-neutral-50">
-          wildecho-api server
+        <Text className="mt-5 text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">
+          Server
         </Text>
-        <Text className="text-sm text-neutral-500 dark:text-neutral-400">
-          The URL of the wildecho-api instance this app should call. See{" "}
+        <Text className="mt-2 text-sm leading-5 text-neutral-500 dark:text-neutral-400">
+          The wildecho-api instance this app should call. See{" "}
           github.com/arunrajiah/wildecho-api for how to self-host one.
         </Text>
 
-        <TextInput
-          value={draft}
-          onChangeText={setDraft}
-          onSubmitEditing={handleSave}
-          placeholder="https://your-instance.example.com"
-          placeholderTextColor="#9ca3af"
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType="url"
-          returnKeyType="done"
-          className={`rounded-lg border px-4 py-3 text-base text-neutral-900 dark:text-neutral-50 ${
-            validationError
-              ? "border-red-500 dark:border-red-500"
-              : "border-neutral-300 dark:border-neutral-700"
-          }`}
-        />
-        {validationError ? (
-          <Text className="text-sm text-red-600 dark:text-red-400">{validationError}</Text>
-        ) : null}
+        <View className="mt-6 gap-4">
+          <Text className="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
+            Server URL
+          </Text>
+          <TextInput
+            value={draft}
+            onChangeText={setDraft}
+            onSubmitEditing={handleSave}
+            placeholder="https://your-instance.example.com"
+            placeholderTextColor="#9ca3af"
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="url"
+            returnKeyType="done"
+            className={`rounded-2xl border bg-neutral-50 px-5 py-4 text-base text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 ${
+              validationError
+                ? "border-red-500 dark:border-red-500"
+                : "border-neutral-200 dark:border-neutral-800"
+            }`}
+          />
+          {validationError ? (
+            <Text className="text-sm text-red-600 dark:text-red-400">{validationError}</Text>
+          ) : null}
 
-        <Pressable
-          onPress={handleSave}
-          disabled={!canSave}
-          className={`items-center rounded-lg py-3 ${canSave ? "bg-blue-600" : "bg-blue-300 dark:bg-blue-950"}`}
-        >
-          <Text className="text-base font-semibold text-white">Save</Text>
-        </Pressable>
+          <Pressable
+            onPress={handleSave}
+            disabled={!canSave}
+            className={`items-center rounded-full py-4 ${
+              canSave ? "bg-brand-500 active:bg-brand-600" : "bg-brand-100 dark:bg-brand-950"
+            }`}
+          >
+            <Text
+              className={`text-base font-semibold ${
+                canSave ? "text-white" : "text-brand-400 dark:text-brand-700"
+              }`}
+            >
+              Save
+            </Text>
+          </Pressable>
+        </View>
 
         {checkedUrl ? (
-          <View className="mt-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-800">
+          <View className="mt-6 rounded-2xl bg-neutral-50 p-5 dark:bg-neutral-900">
             {healthQuery.isLoading ? (
               <Text className="text-neutral-500 dark:text-neutral-400">Checking connection...</Text>
             ) : healthQuery.isError ? (
-              <Text className="text-red-600 dark:text-red-400">
-                Could not reach this server:{" "}
-                {healthQuery.error instanceof Error ? healthQuery.error.message : "unknown error"}
-              </Text>
+              <View className="flex-row items-start gap-2.5">
+                <View className="mt-1.5 h-2.5 w-2.5 rounded-full bg-red-500" />
+                <Text className="flex-1 text-sm leading-5 text-red-600 dark:text-red-400">
+                  Could not reach this server:{" "}
+                  {healthQuery.error instanceof Error ? healthQuery.error.message : "unknown error"}
+                </Text>
+              </View>
             ) : healthQuery.data ? (
-              <View className="gap-1">
-                <Text
-                  className={
-                    healthQuery.data.model_loaded
-                      ? "font-semibold text-emerald-600 dark:text-emerald-400"
-                      : "font-semibold text-amber-600 dark:text-amber-400"
-                  }
-                >
-                  {healthQuery.data.model_loaded
-                    ? "Connected, model ready"
-                    : "Connected, but the model isn't loaded on the server"}
-                </Text>
-                <Text className="text-sm text-neutral-500 dark:text-neutral-400">
-                  wildecho-api v{healthQuery.data.version}
-                  {healthQuery.data.num_classes ? ` - ${healthQuery.data.num_classes} classes` : ""}
-                </Text>
+              <View className="flex-row items-start gap-2.5">
+                <View
+                  className={`mt-1.5 h-2.5 w-2.5 rounded-full ${
+                    healthQuery.data.model_loaded ? "bg-emerald-500" : "bg-amber-500"
+                  }`}
+                />
+                <View className="flex-1 gap-0.5">
+                  <Text
+                    className={
+                      healthQuery.data.model_loaded
+                        ? "text-base font-semibold text-emerald-600 dark:text-emerald-400"
+                        : "text-base font-semibold text-amber-600 dark:text-amber-400"
+                    }
+                  >
+                    {healthQuery.data.model_loaded
+                      ? "Connected, model ready"
+                      : "Connected, but the model isn't loaded on the server"}
+                  </Text>
+                  <Text className="text-sm text-neutral-500 dark:text-neutral-400">
+                    wildecho-api v{healthQuery.data.version}
+                    {healthQuery.data.num_classes
+                      ? ` · ${healthQuery.data.num_classes.toLocaleString()} classes`
+                      : ""}
+                  </Text>
+                </View>
               </View>
             ) : null}
           </View>
