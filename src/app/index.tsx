@@ -8,7 +8,7 @@ import {
   useAudioRecorder,
   useAudioRecorderState,
 } from "expo-audio";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -17,6 +17,9 @@ import { PredictionRow } from "@/components/prediction-row";
 import { identify } from "@/lib/api/client";
 import type { IdentifyResponse, Prediction } from "@/lib/api/types";
 import { useSettingsStore } from "@/stores/settings-store";
+
+/** Recording auto-stops here; the public server rejects clips over 30s. */
+const MAX_RECORDING_MS = 25_000;
 
 const GROUP_LABELS: Record<Prediction["taxonomic_group"], string> = {
   bird: "Bird",
@@ -43,6 +46,8 @@ export default function HomeScreen() {
     },
   });
 
+  const isStoppingRef = useRef(false);
+
   const handleStartRecording = async () => {
     setPermissionError(null);
     let permission = await getRecordingPermissionsAsync();
@@ -58,15 +63,28 @@ export default function HomeScreen() {
 
     await setAudioModeAsync({ allowsRecording: true, playsInSilentMode: true });
     await recorder.prepareToRecordAsync();
+    isStoppingRef.current = false;
     recorder.record();
   };
 
   const handleStopRecording = async () => {
+    if (isStoppingRef.current) {
+      return;
+    }
+    // Stays set until the next recording starts: recorderState polls every 200ms,
+    // so the auto-stop effect can see isRecording=true again after this returns.
+    isStoppingRef.current = true;
     await recorder.stop();
     if (recorder.uri) {
       identifyMutation.mutate(recorder.uri);
     }
   };
+
+  useEffect(() => {
+    if (recorderState.isRecording && recorderState.durationMillis >= MAX_RECORDING_MS) {
+      void handleStopRecording();
+    }
+  });
 
   const handleReset = () => {
     identifyMutation.reset();
@@ -176,7 +194,7 @@ function RecordView({
       </Text>
       <Text className="mt-2 max-w-[260px] text-center text-base leading-6 text-neutral-500 dark:text-neutral-400">
         {isRecording
-          ? `Recording ${seconds}s - tap to stop and identify`
+          ? `Recording ${seconds}s of ${MAX_RECORDING_MS / 1000}s. Tap to stop and identify.`
           : "Record a short clip of an animal call and get ranked species matches."}
       </Text>
 

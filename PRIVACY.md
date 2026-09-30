@@ -6,7 +6,7 @@ WildEcho ("the app") is a mobile client for
 [wildecho-api](https://github.com/arunrajiah/wildecho-api), an open-source,
 self-hostable species identification service. This policy describes what the
 app does with data. By default the app uses a public wildecho-api server run
-by its developer on Hugging Face Spaces; you can switch to your own server in
+by its developer; you can switch to your own server in
 Settings.
 
 ## What the app collects
@@ -38,11 +38,12 @@ server described below.
 
 ## The public server
 
-The default server runs wildecho-api on Hugging Face Spaces. It keeps no copy
-of your audio and has audio storage for feedback turned off. Like any web
-service, the hosting platform (Hugging Face) may keep standard request logs
-such as IP addresses and timestamps; see Hugging Face's privacy policy. The
-server also uses your IP address, briefly and in memory, for rate limiting.
+The default server, wildecho.arunrajiah.com, runs wildecho-api on a cloud
+server operated by WildEcho's developer. It processes each clip in memory and
+keeps no copy of your audio; audio storage for feedback is turned off. It uses
+your IP address, briefly and in memory, for rate limiting, and its web server
+keeps standard short-lived access logs (IP address, time, and request path)
+for security and troubleshooting.
 
 ## Self-hosted servers
 

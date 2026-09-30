@@ -15,7 +15,7 @@ const API_BASE_URL_KEY = "wildecho.apiBaseUrl";
 
 /** Public instance used until the user points the app at their own server. */
 export const DEFAULT_API_BASE_URL =
-  process.env.EXPO_PUBLIC_DEFAULT_API_URL ?? "https://arunrajiah-wildecho-api.hf.space";
+  process.env.EXPO_PUBLIC_DEFAULT_API_URL ?? "https://wildecho.arunrajiah.com";
 
 const storage = {
   getItem: (key: string) =>
