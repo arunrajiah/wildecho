@@ -13,3 +13,9 @@ node_modules
 .expo
 dist
 *.log
+
+# .easignore replaces .gitignore for the upload, so repeat anything that must
+# never leave this machine: signing/API secrets and local build outputs.
+/secrets
+/build-artifacts
+.env*
