@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy policy | WildEcho</title>
+<meta name="description" content="How the WildEcho app and its public server handle your data.">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="canonical" href="https://wildecho.arunrajiah.com/privacy">
+<style>
+:root { --bg:#fff; --text:#0d1b2a; --muted:#52637a; --line:#e3eaf3; --brand:#208aef; --soft:#f5f8fc; }
+@media (prefers-color-scheme: dark) { :root { --bg:#07121f; --text:#e8eef6; --muted:#9db0c6; --line:#1c2f45; --soft:#0b1a2c; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:17px/1.7 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; -webkit-font-smoothing:antialiased; }
+header { border-bottom:1px solid var(--line); }
+.bar { max-width:760px; margin:0 auto; padding:18px 16px; display:flex; align-items:center; justify-content:space-between; }
+.logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:18px; color:var(--text); text-decoration:none; }
+.logo img { width:30px; height:30px; border-radius:8px; }
+a { color:var(--brand); }
+main { max-width:760px; margin:0 auto; padding:40px 16px 72px; }
+h1 { font-size:clamp(30px,5vw,40px); letter-spacing:-.02em; line-height:1.15; margin:0 0 8px; }
+h1 + p em { color:var(--muted); font-style:normal; font-size:15px; }
+h2 { font-size:22px; letter-spacing:-.01em; margin:40px 0 8px; }
+ul { padding-left:22px; }
+li { margin:8px 0; }
+code { background:var(--soft); border:1px solid var(--line); border-radius:6px; padding:1px 6px; font-size:.88em; }
+footer { border-top:1px solid var(--line); color:var(--muted); font-size:14px; }
+footer .bar { padding:24px 16px; }
+</style>
+</head>
+<body>
+<header><div class="bar"><a class="logo" href="/"><img src="/assets/icon-192.png" alt="">WildEcho</a><a href="/">Home</a></div></header>
+<main>
+<h1>WildEcho Privacy Policy</h1>
+<p><em>Last updated: 2026-09-30</em></p>
+<p>WildEcho ("the app") is a mobile client for <a href="https://github.com/arunrajiah/wildecho-api">wildecho-api</a>, an open-source, self-hostable species identification service. This policy describes what the app does with data. By default the app uses a public wildecho-api server run by its developer; you can switch to your own server in Settings.</p>
+<h2>What the app collects</h2>
+<p><strong>No accounts, analytics, advertising, or tracking.</strong> WildEcho has no analytics or advertising SDKs and does not ask who you are. The only data that leaves your device is the audio clip you choose to identify, sent to the server described below.</p>
+<h2>What the app does with your data</h2>
+<ul><li><strong>Microphone audio.</strong> When you record a clip, it is sent over HTTPS to the server in use (the public server by default, or the one you set in Settings), and only to that server. The public server processes each clip in memory to return species matches and does not store it.</li><li><strong>Server URL.</strong> If you enter your own server in Settings, the address is stored only on your device, using Android's secure, encrypted storage (<code>expo-secure-store</code>). It is never transmitted anywhere except as the destination of your own requests.</li><li><strong>Optional feedback.</strong> If the feedback feature is enabled on your configured server and you choose to submit a correction, that correction - and, if you attach one, the audio clip - is sent to that same server. Nowhere else.</li></ul>
+<h2>Permissions this app requests</h2>
+<ul><li><strong>Microphone</strong>: requested only when you tap Record, used only to capture the clip you are about to identify. The app does not record in the background and does not access the microphone at any other time.</li></ul>
+<h2>The public server</h2>
+<p>The default server, wildecho.arunrajiah.com, runs wildecho-api on a cloud server operated by WildEcho's developer. It processes each clip in memory and keeps no copy of your audio; audio storage for feedback is turned off. It uses your IP address, briefly and in memory, for rate limiting, and its web server keeps standard short-lived access logs (IP address, time, and request path) for security and troubleshooting.</p>
+<h2>Self-hosted servers</h2>
+<p>If you switch to another wildecho-api server in Settings, that server is deployed and operated independently. WildEcho's developer does not operate, have access to, or receive data from such a server. If you use a server run by someone else, that operator's own privacy practices govern the data you send them - ask them if you're unsure what they do with it.</p>
+<h2>Data retention and deletion</h2>
+<p>The app itself stores only your custom server URL (if you set one), locally on your device. The public server does not retain your audio. Uninstalling the app removes it. WildEcho retains nothing else on your behalf. Anything stored server-side (e.g. optional feedback corrections) is governed by that server's own retention practices - see wildecho-api's own documentation for its defaults if you operate one yourself.</p>
+<h2>Children's privacy</h2>
+<p>WildEcho is not directed at children and does not knowingly collect information from anyone, regardless of age.</p>
+<h2>Changes to this policy</h2>
+<p>Material changes will be reflected here with an updated date above, and noted in <a href="https://github.com/arunrajiah/wildecho/blob/main/CHANGELOG.md">CHANGELOG.md</a>.</p>
+<h2>Contact</h2>
+<p>Questions about this policy: <a href="mailto:arunrajiah@gmail.com">arunrajiah@gmail.com</a>, or open an issue at <a href="https://github.com/arunrajiah/wildecho/issues">https://github.com/arunrajiah/wildecho/issues</a>.</p>
+</main>
+<footer><div class="bar"><span>WildEcho</span><a href="https://github.com/arunrajiah/wildecho/blob/main/PRIVACY.md">Source of this policy</a></div></footer>
+</body>
+</html>
