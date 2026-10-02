@@ -96,6 +96,24 @@ is listed as a direct dependency so pnpm hoists it to the project root where
 Metro's resolver reliably finds it. If you hit a similar "Unable to resolve
 module" error after adding a new dependency, this is usually the cause.
 
+## Part of an open wildlife toolkit
+
+This project is one of seven open source tools by [Arun Rajiah](https://www.arunrajiah.com) for listening to, identifying and mapping wildlife. They are independent, and each is useful alone, but they are built to work together.
+
+| Project | Role | What it does |
+|---|---|---|
+| [WDX](https://github.com/arunrajiah/wildlife-detection-exchange) | The shared format | An open JSON format for one wildlife detection: what was detected, where, when, by which classifier and with what confidence. Maps field by field to Darwin Core. |
+| [wdx-agent](https://github.com/arunrajiah/wdx-agent) | Share what your device detects | One dependency free Python file for a Raspberry Pi or any computer. Sends detections from BirdNET-Pi, BirdNET-Go, camera traps and bat detectors as WDX. |
+| [WildNetwork](https://github.com/arunrajiah/wildnetwork) | See the whole picture | A live, open map of bird, bat and other animal movement, built from WDX events and public networks. [wildnetwork.arunrajiah.com](https://wildnetwork.arunrajiah.com) |
+| [BirdEcho](https://github.com/arunrajiah/birdecho) | Follow your own station | Android companion app for BirdNET-Pi, BirdNET-Go and BirdWeather stations: today's detections, alerts for species you care about, history. |
+| **WildEcho** (this project) | Identify a sound on your phone | Record a short clip and get ranked species candidates. |
+| [wildecho-api](https://github.com/arunrajiah/wildecho-api) | The identification service | Self-hosted species identification from audio, using Google's open Perch 2.0 model. Runs on CPU, no API keys. Powers WildEcho. |
+| [SpeciesNet Studio](https://github.com/arunrajiah/speciesnet-studio) | Review camera trap results | Self-hosted interface for checking and correcting SpeciesNet classifier predictions before they are used. |
+
+**How this one fits.** WildEcho is the phone app and [wildecho-api](https://github.com/arunrajiah/wildecho-api) does the identifying. Sharing identifications to [WildNetwork](https://wildnetwork.arunrajiah.com) as WDX events is planned, and will be opt in.
+
+**Connected today:** wdx-agent sends to WildNetwork in the WDX format, and WildEcho uses wildecho-api. **Planned:** WDX export from BirdEcho, wildecho-api and SpeciesNet Studio.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, commit conventions
