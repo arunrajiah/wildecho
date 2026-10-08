@@ -8,6 +8,16 @@ Perch 2.0 model.
 [![Expo SDK 57](https://img.shields.io/badge/Expo-SDK%2057-000020.svg)](https://expo.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6.svg)](tsconfig.json)
 
+## Try it in your browser
+
+A free web demo runs on Hugging Face:
+**[huggingface.co/spaces/arunrajiah/wildecho](https://huggingface.co/spaces/arunrajiah/wildecho)**.
+Upload or record a short clip and get ranked species candidates, with nothing to
+install. It uses the same Perch 2.0 model and
+[wildecho-api](https://github.com/arunrajiah/wildecho-api) code as the app, and the
+same limits apply: it is mostly a bird model, it cannot hear bats, and it does not
+use your location. Clips are not stored.
+
 ## Status
 
 The core loop works: configure a wildecho-api server URL in Settings, record
