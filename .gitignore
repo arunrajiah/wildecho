@@ -52,3 +52,7 @@ example
 .idea/
 build-artifacts/
 secrets/
+
+# assistant notes and tooling, kept locally
+CLAUDE.md
+.claude/
