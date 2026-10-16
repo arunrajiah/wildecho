@@ -8,13 +8,14 @@ import {
   useAudioRecorder,
   useAudioRecorderState,
 } from "expo-audio";
-import { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Pressable, ScrollView, Text, View } from "react-native";
+import { type ReactNode, useEffect, useRef, useState } from "react";
+import { ActivityIndicator, Linking, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { BrandMark } from "@/components/brand-mark";
 import { PredictionRow } from "@/components/prediction-row";
 import { identify } from "@/lib/api/client";
+import { shareable, shareIdentification, WILDNETWORK_URL } from "@/lib/wildnetwork";
 import type { IdentifyResponse, Prediction } from "@/lib/api/types";
 import { useSettingsStore } from "@/stores/settings-store";
 
@@ -37,6 +38,15 @@ export default function HomeScreen() {
   const recorderState = useAudioRecorderState(recorder, 200);
   const [permissionError, setPermissionError] = useState<string | null>(null);
 
+  const shareWithWildNetwork = useSettingsStore((state) => state.shareWithWildNetwork);
+  const setShareWithWildNetwork = useSettingsStore((state) => state.setShareWithWildNetwork);
+  const [recordedAt, setRecordedAt] = useState<Date | null>(null);
+  const recordedAtRef = useRef<Date | null>(null);
+
+  const shareMutation = useMutation({
+    mutationFn: ({ result, at }: { result: IdentifyResponse; at: Date }) => shareIdentification(result, at),
+  });
+
   const identifyMutation = useMutation({
     mutationFn: async (fileUri: string) => {
       if (!apiBaseUrl) {
@@ -44,7 +54,14 @@ export default function HomeScreen() {
       }
       return identify(apiBaseUrl, fileUri, "clip.m4a", "audio/m4a");
     },
+    // Sharing is a saved setting: once switched on, every confident identification is shared without asking again.
+    onSuccess: (result) => {
+      if (useSettingsStore.getState().shareWithWildNetwork && shareable(result)) {
+        shareMutation.mutate({ result, at: recordedAtRef.current ?? new Date() });
+      }
+    },
   });
+
 
   const isStoppingRef = useRef(false);
 
@@ -64,6 +81,9 @@ export default function HomeScreen() {
     await setAudioModeAsync({ allowsRecording: true, playsInSilentMode: true });
     await recorder.prepareToRecordAsync();
     isStoppingRef.current = false;
+    const now = new Date();
+    recordedAtRef.current = now;
+    setRecordedAt(now);
     recorder.record();
   };
 
@@ -88,6 +108,14 @@ export default function HomeScreen() {
 
   const handleReset = () => {
     identifyMutation.reset();
+    shareMutation.reset();
+  };
+
+  const handleShareChoice = async (on: boolean) => {
+    await setShareWithWildNetwork(on);
+    if (on && identifyMutation.data) {
+      shareMutation.mutate({ result: identifyMutation.data, at: recordedAt ?? new Date() });
+    }
   };
 
   // Not loaded yet: avoid flashing the "set up a server" prompt before we've
@@ -157,7 +185,20 @@ export default function HomeScreen() {
             onRetry={handleReset}
           />
         ) : identifyMutation.isSuccess ? (
-          <ResultsView result={identifyMutation.data} onReset={handleReset} />
+          <ResultsView
+            result={identifyMutation.data}
+            onReset={handleReset}
+            share={
+              shareable(identifyMutation.data) ? (
+                <ShareCard
+                  setting={shareWithWildNetwork}
+                  state={shareMutation.isPending ? "sending" : shareMutation.isSuccess ? "sent" : shareMutation.isError ? "error" : "idle"}
+                  error={shareMutation.error instanceof Error ? shareMutation.error.message : null}
+                  onChoose={handleShareChoice}
+                />
+              ) : null
+            }
+          />
         ) : (
           <RecordView
             isRecording={recorderState.isRecording}
@@ -265,7 +306,7 @@ function ErrorView({ message, onRetry }: { message: string; onRetry: () => void 
   );
 }
 
-function ResultsView({ result, onReset }: { result: IdentifyResponse; onReset: () => void }) {
+function ResultsView({ result, onReset, share }: { result: IdentifyResponse; onReset: () => void; share: ReactNode }) {
   const [top, ...rest] = result.predictions;
   const topGroup = top?.taxonomic_group;
 
@@ -305,6 +346,8 @@ function ResultsView({ result, onReset }: { result: IdentifyResponse; onReset: (
             No species candidates for this clip.
           </Text>
         ) : null}
+
+        {share}
       </ScrollView>
 
       <Pressable
@@ -314,6 +357,51 @@ function ResultsView({ result, onReset }: { result: IdentifyResponse; onReset: (
         <Text className="text-base font-semibold text-white">Record again</Text>
       </Pressable>
     </View>
+  );
+}
+
+/**
+ * Asks once whether to share identifications with WildNetwork, then shows what happened to this one.
+ * The answer is saved in Settings, so the question never comes back.
+ */
+function ShareCard({
+  setting,
+  state,
+  error,
+  onChoose,
+}: {
+  setting: boolean | null;
+  state: "idle" | "sending" | "sent" | "error";
+  error: string | null;
+  onChoose: (on: boolean) => void;
+}) {
+  if (setting === null) {
+    return (
+      <View className="mt-6 rounded-2xl bg-neutral-50 p-5 dark:bg-neutral-900">
+        <Text className="text-base font-semibold text-neutral-900 dark:text-neutral-50">Share with WildNetwork?</Text>
+        <Text className="mt-1.5 text-sm leading-5 text-neutral-500 dark:text-neutral-400">
+          WildNetwork is a free, open map of where wildlife is heard and seen. If you switch this on, each confident
+          identification is added to it automatically: the species, the time and your location rounded to about 1 km.
+          Your recording is never sent. You can switch it off in Settings at any time.
+        </Text>
+        <View className="mt-4 flex-row gap-3">
+          <Pressable onPress={() => onChoose(true)} className="flex-1 items-center rounded-full bg-brand-500 py-3 active:bg-brand-600">
+            <Text className="text-sm font-semibold text-white">Share automatically</Text>
+          </Pressable>
+          <Pressable onPress={() => onChoose(false)} className="flex-1 items-center rounded-full bg-neutral-200 py-3 active:bg-neutral-300 dark:bg-neutral-800">
+            <Text className="text-sm font-semibold text-neutral-700 dark:text-neutral-200">Not now</Text>
+          </Pressable>
+        </View>
+      </View>
+    );
+  }
+  if (!setting) return null;
+  return (
+    <Pressable onPress={() => void Linking.openURL(WILDNETWORK_URL)} className="mt-6 items-center">
+      <Text className={`text-sm ${state === "error" ? "text-red-600 dark:text-red-400" : "text-neutral-500 dark:text-neutral-400"}`}>
+        {state === "sending" ? "Adding to WildNetwork..." : state === "sent" ? "Added to the WildNetwork map" : state === "error" ? error : ""}
+      </Text>
+    </Pressable>
   );
 }
 

@@ -9,6 +9,9 @@ and this project adheres to
 ## [Unreleased]
 
 ### Added
+* Share with WildNetwork: asks once after a confident identification, then (if you agree) adds each one to the open WildNetwork map automatically as a WDX record (species, confidence, time, location rounded to about 1 km; never the recording). Switch in Settings. Uses approximate location only, and only when sharing.
+
+### Added
 
 * Project bootstrap: Expo SDK 57 (managed workflow), Expo Router with typed
   routes, TypeScript strict, NativeWind, TanStack Query, Zustand,

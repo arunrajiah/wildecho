@@ -29,6 +29,8 @@ app. All the actual ML inference and API logic lives in
 [wildecho-api](https://github.com/arunrajiah/wildecho-api); this repo is just
 the client.
 
+**Sharing with WildNetwork.** After a confident identification, the app asks once whether to share identifications with the open [WildNetwork](https://wildnetwork.arunrajiah.com) map. If you agree, each one is added automatically as a [WDX](https://github.com/arunrajiah/wildlife-detection-exchange) record: species, confidence, time and your location rounded to about 1 km, never the recording. The choice is a switch in Settings. Details: [PRIVACY.md](PRIVACY.md).
+
 **Android is the current focus platform.** The code is ordinary Expo/React
 Native and stays cross-platform (nothing here is Android-specific), but
 day-to-day development and verification target Android first for now. CI

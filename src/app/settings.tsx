@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { Pressable, ScrollView, Switch, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { getHealth } from "@/lib/api/client";
@@ -12,6 +12,8 @@ export default function SettingsScreen() {
   const apiBaseUrl = useSettingsStore((state) => state.apiBaseUrl);
   const isCustom = useSettingsStore((state) => state.isCustom);
   const setApiBaseUrl = useSettingsStore((state) => state.setApiBaseUrl);
+  const shareWithWildNetwork = useSettingsStore((state) => state.shareWithWildNetwork);
+  const setShareWithWildNetwork = useSettingsStore((state) => state.setShareWithWildNetwork);
   const [draft, setDraft] = useState(isCustom ? (apiBaseUrl ?? "") : "");
   const [checkedUrl, setCheckedUrl] = useState(apiBaseUrl);
 
@@ -46,7 +48,7 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white dark:bg-neutral-950">
-      <View className="flex-1 px-6 py-4">
+      <ScrollView className="flex-1" contentContainerClassName="px-6 py-4">
         <Pressable onPress={() => router.back()} hitSlop={12} className="self-start">
           <Text className="text-base font-medium text-brand-500">Back</Text>
         </Pressable>
@@ -149,7 +151,27 @@ export default function SettingsScreen() {
             ) : null}
           </View>
         ) : null}
-      </View>
+
+        <Text className="mt-10 text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">
+          WildNetwork
+        </Text>
+        <View className="mt-4 flex-row items-center gap-4 rounded-2xl bg-neutral-50 p-5 dark:bg-neutral-900">
+          <View className="flex-1">
+            <Text className="text-base font-semibold text-neutral-900 dark:text-neutral-50">
+              Share identifications automatically
+            </Text>
+            <Text className="mt-1 text-sm leading-5 text-neutral-500 dark:text-neutral-400">
+              Adds each confident identification to the open WildNetwork map (wildnetwork.arunrajiah.com): the species, the
+              time and your location rounded to about 1 km. Your recording is never sent.
+            </Text>
+          </View>
+          <Switch
+            value={shareWithWildNetwork === true}
+            onValueChange={(on) => void setShareWithWildNetwork(on)}
+            accessibilityLabel="Share identifications with WildNetwork automatically"
+          />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

@@ -12,6 +12,7 @@ import { create } from "zustand";
  * object), so on web we fall back to localStorage.
  */
 const API_BASE_URL_KEY = "wildecho.apiBaseUrl";
+const SHARE_KEY = "wildecho.shareWithWildNetwork";
 
 /** Public instance used until the user points the app at their own server. */
 export const DEFAULT_API_BASE_URL =
@@ -39,18 +40,32 @@ interface SettingsState {
   isCustom: boolean;
   /** True once the persisted value has been read at least once. */
   isLoaded: boolean;
+  /** Share confident identifications with WildNetwork automatically. null = not asked yet. */
+  shareWithWildNetwork: boolean | null;
   load: () => Promise<void>;
   setApiBaseUrl: (url: string | null) => Promise<void>;
+  setShareWithWildNetwork: (on: boolean) => Promise<void>;
 }
 
 export const useSettingsStore = create<SettingsState>((set) => ({
   apiBaseUrl: null,
   isCustom: false,
   isLoaded: false,
+  shareWithWildNetwork: null,
 
   load: async () => {
-    const stored = await storage.getItem(API_BASE_URL_KEY);
-    set({ apiBaseUrl: stored || DEFAULT_API_BASE_URL, isCustom: Boolean(stored), isLoaded: true });
+    const [stored, share] = await Promise.all([storage.getItem(API_BASE_URL_KEY), storage.getItem(SHARE_KEY)]);
+    set({
+      apiBaseUrl: stored || DEFAULT_API_BASE_URL,
+      isCustom: Boolean(stored),
+      shareWithWildNetwork: share === "on" ? true : share === "off" ? false : null,
+      isLoaded: true,
+    });
+  },
+
+  setShareWithWildNetwork: async (on) => {
+    await storage.setItem(SHARE_KEY, on ? "on" : "off");
+    set({ shareWithWildNetwork: on });
   },
 
   /** Pass null (or the default URL) to go back to the public server. */
