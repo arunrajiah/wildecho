@@ -125,9 +125,9 @@ Eight open source projects for listening to, identifying and mapping wildlife. T
 | Check camera trap predictions before you use them | [SpeciesNet Studio](https://github.com/arunrajiah/speciesnet-studio) | Self-hosted review of SpeciesNet results, then send them to WildNetwork |
 | Make your own software or device produce or read detections in a common format | [WDX](https://github.com/arunrajiah/wildlife-detection-exchange) | The open format for one AI wildlife detection; maps to Darwin Core |
 
-**How this one fits.** WildEcho identifies a sound you record on your phone, using a wildecho-api server.
+**How this one fits.** WildEcho identifies a sound you record on your phone, using a wildecho-api server, and can add confident identifications to WildNetwork if you switch sharing on.
 
-**How they connect:** stations (a WildNetwork Base, BirdNET-Pi, BirdNET-Go, camera traps) produce detections; wdx-agent sends them in the WDX format, SpeciesNet Studio adds a human check for camera traps, and WildNetwork maps them. Connected today: wdx-agent, the WildNetwork Base and SpeciesNet Studio send to WildNetwork, BirdEcho shows WildNetwork arrivals near your station, and WildEcho uses wildecho-api. Planned: Base setup in BirdEcho, and sending WildEcho identifications to WildNetwork.
+**How they connect:** stations (a WildNetwork Base, BirdNET-Pi, BirdNET-Go, camera traps) produce detections; wdx-agent sends them in the WDX format, SpeciesNet Studio adds a human check for camera traps, and WildNetwork maps them. Connected today: wdx-agent, the WildNetwork Base, SpeciesNet Studio and WildEcho (if you switch sharing on) send to WildNetwork, BirdEcho shows WildNetwork arrivals near your station, and WildEcho uses wildecho-api. Planned: Base setup in BirdEcho.
 
 ## Contributing
 
