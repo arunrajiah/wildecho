@@ -70,7 +70,7 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "Allow WildEcho to use your approximate location when you share an identification with WildNetwork.",
+          "locationWhenInUsePermission": "Allow WildEcho to use your approximate location when you share an identification with Wildlife Network.",
           "isAndroidBackgroundLocationEnabled": false,
           "isAndroidForegroundServiceEnabled": false
         }

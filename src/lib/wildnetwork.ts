@@ -5,7 +5,7 @@ import { Platform } from "react-native";
 import type { IdentifyResponse, Prediction } from "./api/types";
 
 /**
- * Sharing identifications with WildNetwork (https://wlnw.org), the open map of wildlife detections.
+ * Sharing identifications with Wildlife Network (https://wlnw.org), the open map of wildlife detections.
  * Only when the user has switched sharing on. Each share is one WDX event (https://github.com/arunrajiah/wildlife-detection-exchange):
  * the best match, the time, and the phone's location rounded to about 1 km. The audio clip is never sent.
  */
@@ -32,7 +32,7 @@ export function shareable(result: IdentifyResponse): Prediction | null {
   return top;
 }
 
-/** This install's WildNetwork key: registered once on first share and kept in secure storage. */
+/** This install's Wildlife Network key: registered once on first share and kept in secure storage. */
 async function deviceKey(): Promise<DeviceKey> {
   const saved = await store.get(KEY_STORE);
   if (saved) return JSON.parse(saved) as DeviceKey;
@@ -43,7 +43,7 @@ async function deviceKey(): Promise<DeviceKey> {
   });
   const body = (await res.json().catch(() => ({}))) as Partial<DeviceKey> & { error?: string };
   if (!res.ok || !body.deviceId || !body.apiKey) {
-    throw new Error(body.error ?? "WildNetwork could not register this phone. Please try again later.");
+    throw new Error(body.error ?? "Wildlife Network could not register this phone. Please try again later.");
   }
   const key = { deviceId: body.deviceId, apiKey: body.apiKey };
   await store.set(KEY_STORE, JSON.stringify(key));
@@ -108,6 +108,6 @@ export async function shareIdentification(result: IdentifyResponse, recordedAt: 
     body: JSON.stringify(toWdx(result, top, key.deviceId, where, recordedAt)),
   });
   const body = (await res.json().catch(() => ({}))) as { received?: number; rejected?: number };
-  if (!res.ok || !body.received || body.rejected) throw new Error("WildNetwork did not accept this identification.");
+  if (!res.ok || !body.received || body.rejected) throw new Error("Wildlife Network did not accept this identification.");
   return top.common_name ?? top.scientific_name;
 }

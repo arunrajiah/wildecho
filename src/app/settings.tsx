@@ -153,7 +153,7 @@ export default function SettingsScreen() {
         ) : null}
 
         <Text className="mt-10 text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">
-          WildNetwork
+          Wildlife Network
         </Text>
         <View className="mt-4 flex-row items-center gap-4 rounded-2xl bg-neutral-50 p-5 dark:bg-neutral-900">
           <View className="flex-1">
@@ -161,14 +161,14 @@ export default function SettingsScreen() {
               Share identifications automatically
             </Text>
             <Text className="mt-1 text-sm leading-5 text-neutral-500 dark:text-neutral-400">
-              Adds each confident identification to the open WildNetwork map (wlnw.org): the species, the
+              Adds each confident identification to the open Wildlife Network map (wlnw.org): the species, the
               time and your location rounded to about 1 km. Your recording is never sent.
             </Text>
           </View>
           <Switch
             value={shareWithWildNetwork === true}
             onValueChange={(on) => void setShareWithWildNetwork(on)}
-            accessibilityLabel="Share identifications with WildNetwork automatically"
+            accessibilityLabel="Share identifications with Wildlife Network automatically"
           />
         </View>
       </ScrollView>

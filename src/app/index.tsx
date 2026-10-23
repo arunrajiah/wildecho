@@ -361,7 +361,7 @@ function ResultsView({ result, onReset, share }: { result: IdentifyResponse; onR
 }
 
 /**
- * Asks once whether to share identifications with WildNetwork, then shows what happened to this one.
+ * Asks once whether to share identifications with Wildlife Network, then shows what happened to this one.
  * The answer is saved in Settings, so the question never comes back.
  */
 function ShareCard({
@@ -378,9 +378,9 @@ function ShareCard({
   if (setting === null) {
     return (
       <View className="mt-6 rounded-2xl bg-neutral-50 p-5 dark:bg-neutral-900">
-        <Text className="text-base font-semibold text-neutral-900 dark:text-neutral-50">Share with WildNetwork?</Text>
+        <Text className="text-base font-semibold text-neutral-900 dark:text-neutral-50">Share with Wildlife Network?</Text>
         <Text className="mt-1.5 text-sm leading-5 text-neutral-500 dark:text-neutral-400">
-          WildNetwork is a free, open map of where wildlife is heard and seen. If you switch this on, each confident
+          Wildlife Network is a free, open map of where wildlife is heard and seen. If you switch this on, each confident
           identification is added to it automatically: the species, the time and your location rounded to about 1 km.
           Your recording is never sent. You can switch it off in Settings at any time.
         </Text>
@@ -399,7 +399,7 @@ function ShareCard({
   return (
     <Pressable onPress={() => void Linking.openURL(WILDNETWORK_URL)} className="mt-6 items-center">
       <Text className={`text-sm ${state === "error" ? "text-red-600 dark:text-red-400" : "text-neutral-500 dark:text-neutral-400"}`}>
-        {state === "sending" ? "Adding to WildNetwork..." : state === "sent" ? "Added to the WildNetwork map" : state === "error" ? error : ""}
+        {state === "sending" ? "Adding to Wildlife Network..." : state === "sent" ? "Added to the Wildlife Network map" : state === "error" ? error : ""}
       </Text>
     </Pressable>
   );

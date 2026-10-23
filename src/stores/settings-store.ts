@@ -40,7 +40,7 @@ interface SettingsState {
   isCustom: boolean;
   /** True once the persisted value has been read at least once. */
   isLoaded: boolean;
-  /** Share confident identifications with WildNetwork automatically. null = not asked yet. */
+  /** Share confident identifications with Wildlife Network automatically. null = not asked yet. */
   shareWithWildNetwork: boolean | null;
   load: () => Promise<void>;
   setApiBaseUrl: (url: string | null) => Promise<void>;
