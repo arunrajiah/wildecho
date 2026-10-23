@@ -6,10 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1.0] (build 10) - 2026-10-23
+
+### Changed
+* WildNetwork is now Wildlife Network, at wlnw.org. Sharing settings, the privacy text and links use the new name and address.
 
 ### Added
-* Share with WildNetwork: asks once after a confident identification, then (if you agree) adds each one to the open WildNetwork map automatically as a WDX record (species, confidence, time, location rounded to about 1 km; never the recording). Switch in Settings. Uses approximate location only, and only when sharing.
+* Share with Wildlife Network: asks once after a confident identification, then (if you agree) adds each one to the open Wildlife Network map automatically as a WDX record (species, confidence, time, location rounded to about 1 km; never the recording). Switch in Settings. Uses approximate location only, and only when sharing.
 
 ### Added
 
