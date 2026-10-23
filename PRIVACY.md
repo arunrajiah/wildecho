@@ -33,7 +33,7 @@ each confident identification sent to WildNetwork (see below).
 
 - **Sharing with WildNetwork (off unless you switch it on).** WildEcho asks
   once whether to share identifications with
-  [WildNetwork](https://wildnetwork.arunrajiah.com), a free, open map of
+  [WildNetwork](https://wlnw.org), a free, open map of
   wildlife detections run by WildEcho's developer. If you choose "Share
   automatically" (or switch it on in Settings), each confident identification
   of an animal is sent to WildNetwork with: the species and the model's
@@ -45,7 +45,7 @@ each confident identification sent to WildNetwork (see below).
   WildNetwork map and in its open data under CC BY 4.0. Switch sharing off in
   Settings at any time; to remove records already shared, email the address
   below. WildNetwork's own policy:
-  <https://wildnetwork.arunrajiah.com/privacy>.
+  <https://wlnw.org/privacy>.
 
 ## Permissions this app requests
 

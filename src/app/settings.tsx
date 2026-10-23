@@ -161,7 +161,7 @@ export default function SettingsScreen() {
               Share identifications automatically
             </Text>
             <Text className="mt-1 text-sm leading-5 text-neutral-500 dark:text-neutral-400">
-              Adds each confident identification to the open WildNetwork map (wildnetwork.arunrajiah.com): the species, the
+              Adds each confident identification to the open WildNetwork map (wlnw.org): the species, the
               time and your location rounded to about 1 km. Your recording is never sent.
             </Text>
           </View>

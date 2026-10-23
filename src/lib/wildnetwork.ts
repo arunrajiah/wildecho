@@ -5,11 +5,11 @@ import { Platform } from "react-native";
 import type { IdentifyResponse, Prediction } from "./api/types";
 
 /**
- * Sharing identifications with WildNetwork (https://wildnetwork.arunrajiah.com), the open map of wildlife detections.
+ * Sharing identifications with WildNetwork (https://wlnw.org), the open map of wildlife detections.
  * Only when the user has switched sharing on. Each share is one WDX event (https://github.com/arunrajiah/wildlife-detection-exchange):
  * the best match, the time, and the phone's location rounded to about 1 km. The audio clip is never sent.
  */
-export const WILDNETWORK_URL = "https://wildnetwork.arunrajiah.com";
+export const WILDNETWORK_URL = "https://wlnw.org";
 const KEY_STORE = "wildecho.wildnetwork.device";
 const APP_VERSION = "1.1.0";
 
