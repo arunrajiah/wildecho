@@ -1,6 +1,6 @@
 # WildEcho Privacy Policy
 
-_Last updated: 2026-10-16_
+_Last updated: 2026-10-27_
 
 WildEcho ("the app") is a mobile client for
 [wildecho-api](https://github.com/arunrajiah/wildecho-api), an open-source,
@@ -83,6 +83,14 @@ your behalf. Anything stored server-side (e.g. optional feedback
 corrections) is governed by that server's own retention practices - see
 wildecho-api's own documentation for its defaults if you operate one
 yourself.
+
+## Deleting your data
+
+WildEcho has no accounts, so there is nothing to close. To delete your data:
+
+- **On your phone**: uninstall WildEcho. This removes your server address, your sharing choice and the Wildlife Network key.
+- **Audio**: nothing to delete. The public server processes each clip in memory and keeps no copy.
+- **Identifications shared with Wildlife Network**: switch sharing off in Settings, then email arunrajiah@gmail.com with the subject "WildEcho deletion" and the approximate dates and places of your shares. The records are deleted within two days and left out of future open data releases. Records already in a dated, published release cannot be recalled from people who downloaded it.
 
 ## Children's privacy
 
